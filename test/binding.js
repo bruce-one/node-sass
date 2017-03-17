@@ -1,7 +1,6 @@
 /*eslint new-cap: ["error", {"capIsNewExceptions": ["Color"]}]*/
 
 var assert = require('assert'),
-  path = require('path'),
   etx = require('../lib/extensions'),
   binding = process.env.NODESASS_COV
       ? require('../lib-cov/binding')
