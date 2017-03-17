@@ -16,7 +16,7 @@ os:
 
 env:
   global:
-    - SKIP_SASS_BINARY_DOWNLOAD_FOR_CI=true
+    - secure: GM28mePDOytl0OQkWU8ayDmWbk4yn8YNiFD3zUJV/FJq9RbIZl5UhUgZ75TWPILusficM1jCPsQZRLZrXYHyA2mquH3lxM7T83O7YwYtGYS00/FJFZEsEnAln8tTBCkzvhK0++wypGJg05liqy3K3RIp75QIKSUGoETfaurvwvm2fbxhRaw763TJi6aktjcv6BwzlpsAmWDFw7G9lGvSAgwF2v6f8E8F1P3vLzCmxXX/u0iQyE0LXFgqrizmALwS+bFQJDNl+jETZpMPLHj8LWZC7vmOORRop5mVBDBuPHuFIBcKqVVnan+rZyPEd6QSwojNY+ya+ymEWp5tL/xfuOf5ql3Mw2mXEghhfhQHYQATACUcrXHBsEfCEXsXsVDB9Zg9C6llbWB8xfLIVuwNK1NnOcnZrZJHxj4X4mEEeUdALtYe70xdK3HpIhFrz0CvWtYjl2OhA5tkH4OZOxAUSHtDb/KdXEzw4p80Jl1xxSsb2GhGe3lkTW5SqI34+Sy6CftVRBb86NgpmU5JaR041m5W5h2RhJxiLJtJHBwWL+DeMQ7gObo1vDJ/LvlFprLTAJ+q96SIu6P3CdCsS2b1a381ImXZBVL75qn0IPKMqJzMxjxifXFndWnhp2X7YTOc6nrfOqe24DlJLKEKR0psIndwIALXVDvg36R9s0pNymc
 
 matrix:
   fast_finish: true
@@ -38,10 +38,10 @@ addons:
 before_install:
   - npm config set python `which python`
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CC="gcc-4.7";
-      export CXX="g++-4.7";
-      export LINK="gcc-4.7";
-      export LINKXX="g++-4.7";
+      export CC="gcc-4.8";
+      export CXX="g++-4.8";
+      export LINK="gcc-4.8";
+      export LINKXX="g++-4.8";
     fi
   - nvm --version
   - node --version
@@ -49,8 +49,10 @@ before_install:
   - gcc --version
   - g++ --version
 
+install:
+  - npm install --build-from-source
+
 script:
-  - npm install
   - if [ $TRAVIS_OS_NAME == "linux" ] && [ $TRAVIS_NODE_VERSION == "4" ]; then
       npm run lint || exit 1;
     fi
@@ -60,15 +62,11 @@ after_success:
   - if [ $TRAVIS_OS_NAME == "linux" ] && [ $TRAVIS_NODE_VERSION == "4" ]; then
       npm run-script coverage;
     fi
+  - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
+  - if [[ ${COMMIT_MESSAGE} =~ "[publish]" ]]; then $(npm bin)/node-pre-gyp package && $(npm bin)/node-pre-gyp-github publish; fi;
 
 cache:
   directories:
     - $HOME/.node-gyp
     - $HOME/.npm
     - node_modules
-
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/8dddd234a441d0d07664
-    on_success: change
