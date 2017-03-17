@@ -8,7 +8,7 @@
   "homepage": "https://github.com/sass/node-sass",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bruce-one/node-sass"
+    "url": "https://github.com/bruce-one/node-sass.git"
   },
   "author": {
     "name": "Andrew Nesbitt",
