@@ -10,11 +10,11 @@ var assert = require('assert'),
 describe('binding', function() {
   describe('missing error', function() {
     it('should be useful', function() {
-      process.env.SASS_BINARY_NAME = 'Linux-x64-48';
+      process.env.SASS_BINARY_PATH = 'Linux-x64-48';
       assert.throws(
         function() { binding(etx); },
         function(err) {
-          var re = new RegExp('Missing binding.*?\\' + path.sep + 'vendor\\' + path.sep);
+          var re = new RegExp('Missing binding.*?');
           if ((err instanceof Error)) {
             return re.test(err);
           }
@@ -28,7 +28,7 @@ describe('binding', function() {
         function(err) {
           var etx = require('../lib/extensions');
 
-          delete process.env.SASS_BINARY_NAME;
+          delete process.env.SASS_BINARY_PATH;
 
           if ((err instanceof Error)) {
             return err.message.indexOf(
