@@ -29,7 +29,6 @@ describe('binding', function() {
           var etx = require('../lib/extensions');
 
           delete process.env.SASS_BINARY_NAME;
-            console.log(etx.getHumanEnvironment(etx.getBinaryName()))
 
           if ((err instanceof Error)) {
             return err.message.indexOf(
