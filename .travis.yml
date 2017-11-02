@@ -72,7 +72,7 @@ script:
 
 after_success:
   - if [ $TRAVIS_OS_NAME == "linux" ] && [ $TRAVIS_NODE_VERSION == "4" ]; then
-      npm run-script coverage;
+      npm run-script coverage || true;
     fi
   - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
   - if [[ ${COMMIT_MESSAGE} =~ "[publish]" ]]; then $(npm bin)/node-pre-gyp package && $(npm bin)/node-pre-gyp-github publish -r; fi;
